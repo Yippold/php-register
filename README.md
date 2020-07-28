@@ -1,4 +1,4 @@
-Basic PHP Register for any website, with an MD5 Password Hashing system.
+Basic PHP Register for any website, with an Argon2 Password Hashing system.
 
 ## Installation
 
