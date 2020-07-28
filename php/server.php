@@ -1,54 +1,48 @@
 <?php 
 	session_start();
 
-	// variable declaration
 	$server = "SERVER_NAME";
 	$user = "USERNAME";
 	$pass = "PASSWORD";
 	$db = "DATABASE_NAME";
-	$username = "";
-	$email    = "";
-	$password = "";
 	$errors = array();
 	$_SESSION['success'] = "";
 
-	// connect to database
-	$conn = new mysqli($server, $user, $pass, $db);
-	if ($conn->connect_error) {
-    die("Connection to database failed: " . $conn->connect_error);
+	$connection = new mysqli($server, $user, $pass, $db);
+	if ($connection->connect_error) {
+    die("Failed the connection to the database: " . $connection->connect_error);
 	}
 
-	// REGISTER USER
 	if (isset($_POST['register'])){
-		$username = mysqli_real_escape_string($db, $_POST['username']);
-		$email = mysqli_real_escape_string($db, $_POST['email']);
-		$password1 = mysqli_real_escape_string($db, $_POST['password1']);
-		$password2 = mysqli_real_escape_string($db, $_POST['password2']);
+		$username = mysqli_real_escape_string($connection, $_POST['username']);
+		$email = mysqli_real_escape_string($connection, $_POST['email']);
+		$password1 = mysqli_real_escape_string($connection, $_POST['password1']);
+		$password2 = mysqli_real_escape_string($connection, $_POST['password2']);
 
-		$sql = "INSERT INTO people (user, password) VALUES ('$username','$password')";
-	
-		if ($conn->query($sql) === TRUE) {
-			echo "Registered successfully.";
+		if (count($errors) == 0) {
+			$password = md5($password1);//encrypt the password before saving in the database
+			$sql = "INSERT INTO users (username, email, password) 
+					  VALUES('$username', '$email', '$password')";
+			mysqli_query($connection, $sql);
+			
+		# next script is temporarily deactivated because it makes the infos appear twice in the db so i'll fix that later lol
+		/*if ($connection->query($sql) === TRUE) {
+			echo "Successfully registered";
 		} else {
-			array_push($errors, "Account already exists");
-		}
+			array_push($errors, "An error has occured");
+		}*/
 
-		// form validation: ensure that the form is correctly filled
 		if (empty($username)) { array_push($errors, "Username is required"); }
+		if (empty($email)) { array_push($errors, "Email is required"); }
 		if (empty($password1)) { array_push($errors, "Password is required"); }
 
 		if ($password1 != $password2) {
 			array_push($errors, "The two passwords do not match");
 		}
-
-		if (count($errors) == 0) {
-			$password = md5($password);
-			$query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
-			$results = mysqli_query($db, $query);
-		}
 	}
+}
 	
 
-	$conn->close();
+	$connection->close();
 
 ?>
