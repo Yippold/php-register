@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Register | Penguin Club</title>
+	<title>Register/title>
 	<link rel="stylesheet" type="text/css" href="./css/style.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
 
 		<div class="input-group">
 			<label>Username</label>
-			<input type="text" name="username" value="username" maxlength = "12">
+			<input type="text" name="username">
 		</div>
 		<div class="input-group">
 			<label>Email Address</label>
