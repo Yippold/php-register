@@ -20,7 +20,7 @@
 		$password2 = mysqli_real_escape_string($connection, $_POST['password2']);
 
 		if (count($errors) == 0) {
-			$password = md5($password1);//encrypt the password before saving in the database
+			$password = password_hash($password1, PASSWORD_ARGON2I);
 			$sql = "INSERT INTO users (username, email, password) 
 					  VALUES('$username', '$email', '$password')";
 			mysqli_query($connection, $sql);
